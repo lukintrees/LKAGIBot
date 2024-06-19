@@ -1,0 +1,17 @@
+bot:
+  system_prompt: "You are helpful assistant"
+  model: "gpt-4o"
+  embedded_model: "text-embedding-3-small"
+
+  discord:
+    token: "xxx"
+    self_bot: true
+    allow_dms: true
+
+  telegram:
+    token: "xxx"
+    allow_dms: true
+
+api:
+  key: "sk-xxx"
+#  baseUrl: "https://api.openai.com/v1"

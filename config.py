@@ -12,3 +12,19 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+import yaml
+
+_config_cache = None
+
+
+def get_config(filepath="config.yaml"):
+    global _config_cache
+
+    if _config_cache is not None:
+        return _config_cache
+
+    with open(filepath, "r") as file:
+        _config_cache = yaml.safe_load(file)
+
+    return _config_cache
