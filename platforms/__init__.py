@@ -12,3 +12,33 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+from abc import ABC, abstractmethod
+from typing import Iterable, List
+
+
+class Message:
+    def __init__(self, text: str):
+        self.text: str = text
+
+
+class Provider(ABC):
+    @abstractmethod
+    async def send_message(self, message: str, reply_to: Message):
+        pass
+
+    @abstractmethod
+    async def get_message_generator(self) -> Iterable[Message]:
+        pass
+
+    @abstractmethod
+    async def get_message_context(self, message: Message) -> List[Message]:
+        pass
+
+    @abstractmethod
+    async def start(self):
+        pass
+
+    @abstractmethod
+    async def stop(self):
+        pass
