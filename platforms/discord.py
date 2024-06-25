@@ -23,14 +23,18 @@ from platforms import Message, Provider
 
 
 class DiscordMessage(Message):
-    def __init__(self, message: discord.Message):
-        super().__init__(message.content)
+    def __init__(self, message: discord.Message, bot: discord.Client):
+        super().__init__(
+            message.content, message.author.display_name, message.author == bot.user
+        )
         self.message = message
 
-    async def get_context(self, limit: int = 5) -> List["DiscordMessage"]:
+    async def get_context(
+        self, bot: discord.Client, limit: int = 5
+    ) -> List["DiscordMessage"]:
         context = []
         async for msg in self.message.channel.history(limit=limit, before=self.message):
-            context.append(DiscordMessage(msg))
+            context.append(DiscordMessage(msg, bot))
         return context
 
 
@@ -56,11 +60,11 @@ class DiscordProvider(Provider):
     async def get_message_generator(self) -> AsyncIterable[DiscordMessage]:
         while True:
             message = await self.message_queue.get()
-            yield DiscordMessage(message)
+            yield DiscordMessage(message, self.bot)
 
     async def get_message_context(self, message: Message) -> List[DiscordMessage]:
         if isinstance(message, DiscordMessage):
-            return await message.get_context()
+            return await message.get_context(self.bot)
         else:
             raise ValueError("message must be an instance of DiscordMessage")
 

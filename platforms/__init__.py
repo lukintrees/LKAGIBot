@@ -18,8 +18,10 @@ from typing import Iterable, List
 
 
 class Message:
-    def __init__(self, text: str):
+    def __init__(self, text: str, author: str, is_our: bool):
         self.text: str = text
+        self.author: str = author
+        self.is_our: bool = is_our
 
 
 class Provider(ABC):
