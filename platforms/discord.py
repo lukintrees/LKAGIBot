@@ -44,7 +44,11 @@ class DiscordProvider(Provider):
     async def send_message(self, message: str, reply_to: Message):
         if isinstance(reply_to, DiscordMessage):
             await reply_to.message.channel.send(
-                message, reference=reply_to.message, allow_mentions=False
+                message,
+                allowed_mentions=discord.AllowedMentions(
+                    roles=False, users=False, everyone=False
+                ),
+                reference=reply_to.message.reference
             )
         else:
             raise ValueError("reply_to must be an instance of DiscordMessage")
