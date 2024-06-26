@@ -59,9 +59,9 @@ class DiscordProvider(Provider):
             await reply_to.message.channel.send(
                 message,
                 allowed_mentions=discord.AllowedMentions(
-                    roles=False, users=False, everyone=False
+                    roles=False, users=False, everyone=False, replied_user=False
                 ),
-                reference=reply_to.message.reference,
+                reference=reply_to.message,
             )
         else:
             raise ValueError("reply_to must be an instance of DiscordMessage")
