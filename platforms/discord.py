@@ -17,6 +17,7 @@ import logging
 from typing import List, AsyncIterable
 
 import discord
+from discord.context_managers import Typing
 
 from config import get_config
 from platforms import Message, Provider
@@ -52,7 +53,7 @@ class DiscordProvider(Provider):
                 allowed_mentions=discord.AllowedMentions(
                     roles=False, users=False, everyone=False
                 ),
-                reference=reply_to.message.reference
+                reference=reply_to.message.reference,
             )
         else:
             raise ValueError("reply_to must be an instance of DiscordMessage")
@@ -65,6 +66,12 @@ class DiscordProvider(Provider):
     async def get_message_context(self, message: Message) -> List[DiscordMessage]:
         if isinstance(message, DiscordMessage):
             return await message.get_context(self.bot)
+        else:
+            raise ValueError("message must be an instance of DiscordMessage")
+
+    def typing(self, message: Message):
+        if isinstance(message, DiscordMessage):
+            return Typing(message.message.channel)
         else:
             raise ValueError("message must be an instance of DiscordMessage")
 

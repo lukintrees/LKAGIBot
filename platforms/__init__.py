@@ -14,7 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
-from typing import Iterable, List
+from typing import List, AsyncIterable
 
 
 class Message:
@@ -30,11 +30,15 @@ class Provider(ABC):
         pass
 
     @abstractmethod
-    async def get_message_generator(self) -> Iterable[Message]:
+    async def get_message_generator(self) -> AsyncIterable[Message]:
         pass
 
     @abstractmethod
     async def get_message_context(self, message: Message) -> List[Message]:
+        pass
+
+    @abstractmethod
+    async def typing(self, message: Message):
         pass
 
     @abstractmethod
