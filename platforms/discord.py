@@ -36,6 +36,7 @@ class DiscordMessage(Message):
         context = []
         async for msg in self.message.channel.history(limit=limit, before=self.message):
             context.append(DiscordMessage(msg, bot))
+        context.reverse()
         return context
 
 
