@@ -32,10 +32,7 @@ async def main():
     client = AsyncClient(
         api_key=config["api"]["key"], base_url=config["api"]["base_url"]
     )
-    if config["bot"]["discord"]["self_bot"]:
-        provider: Provider = DiscordProvider()
-    else:
-        provider: Provider = DiscordProvider()
+    provider: Provider = DiscordProvider()
     task = asyncio.create_task(provider.start())
     async for message in provider.get_message_generator():
         async with provider.typing(message):

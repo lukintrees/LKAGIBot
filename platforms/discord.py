@@ -16,11 +16,15 @@ import asyncio
 import logging
 from typing import List, AsyncIterable
 
-import discord
-from discord.context_managers import Typing
-
 from config import get_config
 from platforms import Message, Provider
+
+if get_config()["bot"]["discord"]["self_bot"]:
+    import selfcord as discord
+    from selfcord.context_managers import Typing
+else:
+    import discord
+    from discord.context_managers import Typing
 
 
 class DiscordMessage(Message):
@@ -44,7 +48,10 @@ class DiscordProvider(Provider):
     def __init__(self):
         self.config = get_config()["bot"]["discord"]
         self.token = self.config["token"]
-        self.bot = discord.Client(intents=discord.Intents.all())
+        if get_config()["bot"]["discord"]["self_bot"]:
+            self.bot = discord.Client()
+        else:
+            self.bot = discord.Client(intents=discord.Intents.all())
         self.message_queue = asyncio.Queue()
 
     async def send_message(self, message: str, reply_to: Message):
@@ -83,7 +90,7 @@ class DiscordProvider(Provider):
 
         @self.bot.event
         async def on_message(message):
-            if message.author != self.bot.user:
+            if message.author != self.bot.user and self.bot.user in message.mentions:
                 await self.message_queue.put(message)
 
         await self.bot.start(self.token)
