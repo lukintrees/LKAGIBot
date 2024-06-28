@@ -30,7 +30,7 @@ else:
 class DiscordMessage(Message):
     def __init__(self, message: discord.Message, bot: discord.Client, text: str = None):
         super().__init__(
-            text or message.content,
+            text or message.clean_content,
             message.author.display_name,
             message.author == bot.user,
         )
