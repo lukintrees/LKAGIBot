@@ -48,8 +48,6 @@ class DiscordMessage(Message):
         count = 0
 
         for msg in messages:
-            if len(context) >= 10:
-                break
             if (
                 current_message is None
                 or msg.author != current_message.author
@@ -73,7 +71,7 @@ class DiscordMessage(Message):
                 DiscordMessage(current_message, bot, "==<|>==".join(current_text))
             )
 
-        return context
+        return context[-10:]
 
 
 class DiscordProvider(Provider):
