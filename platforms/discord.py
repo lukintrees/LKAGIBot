@@ -28,19 +28,51 @@ else:
 
 
 class DiscordMessage(Message):
-    def __init__(self, message: discord.Message, bot: discord.Client):
+    def __init__(self, message: discord.Message, bot: discord.Client, text: str = None):
         super().__init__(
-            message.content, message.author.display_name, message.author == bot.user
+            text or message.content,
+            message.author.display_name,
+            message.author == bot.user,
         )
         self.message = message
 
-    async def get_context(
-        self, bot: discord.Client, limit: int = 5
-    ) -> List["DiscordMessage"]:
+    async def get_context(self, bot: discord.Client) -> List["DiscordMessage"]:
+        messages = []
+        async for msg in self.message.channel.history(limit=25, before=self.message):
+            messages.append(msg)
+        messages.reverse()
+
         context = []
-        async for msg in self.message.channel.history(limit=limit, before=self.message):
-            context.append(DiscordMessage(msg, bot))
-        context.reverse()
+        current_message = None
+        current_text = []
+        count = 0
+
+        for msg in messages:
+            if len(context) >= 10:
+                break
+            if (
+                current_message is None
+                or msg.author != current_message.author
+                or count >= 5
+            ):
+                if current_message:
+                    context.append(
+                        DiscordMessage(
+                            current_message, bot, "==<|>==".join(current_text)
+                        )
+                    )
+                current_message = msg
+                current_text = [current_message.content]
+                count = 1
+            else:
+                current_text.append(msg.content)
+                count += 1
+
+        if current_message:
+            context.append(
+                DiscordMessage(current_message, bot, "==<|>==".join(current_text))
+            )
+
         return context
 
 
