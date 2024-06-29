@@ -45,7 +45,11 @@ async def main():
                 messages=messages,
                 model=config["bot"]["model"],
             )
-            await provider.send_message(response.choices[0].message.content, message)
+            messages = response.choices[0].message.content.split("=<|>=")
+            await provider.send_message(messages.pop(), message, True)
+            for msg in messages:
+                await asyncio.sleep(3)
+                await provider.send_message(msg, message, False)
 
 
 def to_openai_messages(messages: List[Message]) -> List:

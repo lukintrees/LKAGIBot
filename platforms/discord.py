@@ -55,9 +55,7 @@ class DiscordMessage(Message):
             ):
                 if current_message:
                     context.append(
-                        DiscordMessage(
-                            current_message, bot, "==<|>==".join(current_text)
-                        )
+                        DiscordMessage(current_message, bot, "=<|>=".join(current_text))
                     )
                 current_message = msg
                 current_text = [current_message.content]
@@ -68,7 +66,7 @@ class DiscordMessage(Message):
 
         if current_message:
             context.append(
-                DiscordMessage(current_message, bot, "==<|>==".join(current_text))
+                DiscordMessage(current_message, bot, "=<|>=".join(current_text))
             )
 
         return context[-10:]
