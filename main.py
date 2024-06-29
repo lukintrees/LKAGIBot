@@ -46,7 +46,7 @@ async def main():
                 model=config["bot"]["model"],
             )
             messages = response.choices[0].message.content.split("=<|>=")
-            await provider.send_message(messages.pop(), message, True)
+            await provider.send_message(messages.pop(0), message, True)
             for msg in messages:
                 await asyncio.sleep(3)
                 await provider.send_message(msg, message, False)
