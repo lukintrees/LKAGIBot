@@ -84,14 +84,14 @@ class DiscordProvider(Provider):
             self.bot = discord.Client(intents=discord.Intents.all())
         self.message_queue = asyncio.Queue()
 
-    async def send_message(self, message: str, reply_to: Message):
+    async def send_message(self, message: str, reply_to: Message, reply: bool):
         if isinstance(reply_to, DiscordMessage):
             await reply_to.message.channel.send(
                 message,
                 allowed_mentions=discord.AllowedMentions(
                     roles=False, users=False, everyone=False, replied_user=False
                 ),
-                reference=reply_to.message,
+                reference=reply_to.message if reply else None,
             )
         else:
             raise ValueError("reply_to must be an instance of DiscordMessage")

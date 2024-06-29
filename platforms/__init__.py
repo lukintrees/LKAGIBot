@@ -26,7 +26,7 @@ class Message:
 
 class Provider(ABC):
     @abstractmethod
-    async def send_message(self, message: str, reply_to: Message):
+    async def send_message(self, message: str, reply_to: Message, reply: bool):
         pass
 
     @abstractmethod
