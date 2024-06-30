@@ -46,10 +46,13 @@ async def main():
                 model=config["bot"]["model"],
             )
             messages = response.choices[0].message.content.split("=<|>=")
-            await provider.send_message(messages.pop(0), message, True)
+            first_reply = True
             for msg in messages:
-                await asyncio.sleep(3)
-                await provider.send_message(msg, message, False)
+                if config["bot"]["simulate_typing"]:
+                    await asyncio.sleep(len(msg) / (config["bot"]["typing_speed"] / 60))
+                await asyncio.sleep(1)
+                await provider.send_message(msg, message, first_reply)
+                first_reply = False
 
 
 def to_openai_messages(messages: List[Message]) -> List:
