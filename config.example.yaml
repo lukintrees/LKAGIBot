@@ -1,6 +1,7 @@
 bot:
   system_prompt: "You are helpful assistant"
   model: "gpt-4o"
+  vision_model: true
   simulate_typing: true
   typing_speed: 100
 

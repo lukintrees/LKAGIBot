@@ -58,7 +58,7 @@ async def main():
 def to_openai_messages(messages: List[Message]) -> List:
     result = []
     for msg in messages:
-        if msg.images:
+        if msg.images and get_config()["bot"]["vision_model"]:
             result.append(
                 {
                     "role": "assistant" if msg.is_our else "user",
