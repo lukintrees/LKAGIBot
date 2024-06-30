@@ -33,6 +33,11 @@ class DiscordMessage(Message):
             text or message.clean_content,
             message.author.display_name,
             message.author == bot.user,
+            [
+                img.url
+                for img in message.attachments
+                if img.filename.endswith((".jpg", ".jpeg", ".png", ".webp"))
+            ],
         )
         self.message = message
 

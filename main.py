@@ -55,12 +55,34 @@ async def main():
 def to_openai_messages(messages: List[Message]) -> List:
     result = []
     for msg in messages:
-        result.append(
-            {
-                "role": "assistant" if msg.is_our else "user",
-                "content": msg.text if msg.is_our else f"{msg.author}:{msg.text}",
-            }
-        )
+        if msg.images:
+            result.append(
+                {
+                    "role": "assistant" if msg.is_our else "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": (
+                                msg.text if msg.is_our else f"{msg.author}:{msg.text}"
+                            ),
+                        },
+                    ]
+                    + [
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": image, "detail": "auto"},
+                        }
+                        for image in msg.images
+                    ],
+                }
+            )
+        else:
+            result.append(
+                {
+                    "role": "assistant" if msg.is_our else "user",
+                    "content": msg.text if msg.is_our else f"{msg.author}:{msg.text}",
+                }
+            )
     return result
 
 

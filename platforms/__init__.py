@@ -18,10 +18,11 @@ from typing import List, AsyncIterable
 
 
 class Message:
-    def __init__(self, text: str, author: str, is_our: bool):
+    def __init__(self, text: str, author: str, is_our: bool, images: List[str]):
         self.text: str = text
         self.author: str = author
         self.is_our: bool = is_our
+        self.images: List[str] = images
 
 
 class Provider(ABC):
