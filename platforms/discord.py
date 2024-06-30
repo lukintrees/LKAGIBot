@@ -63,10 +63,10 @@ class DiscordMessage(Message):
                         DiscordMessage(current_message, bot, "=<|>=".join(current_text))
                     )
                 current_message = msg
-                current_text = [current_message.content]
+                current_text = [current_message.clean_content]
                 count = 1
             else:
-                current_text.append(msg.content)
+                current_text.append(msg.clean_content)
                 count += 1
 
         if current_message:
