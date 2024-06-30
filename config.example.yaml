@@ -1,18 +1,16 @@
 bot:
   system_prompt: "You are helpful assistant"
   model: "gpt-4o"
-  embedded_model: "text-embedding-3-small"
   simulate_typing: true
   typing_speed: 100
 
   discord:
     token: "xxx"
     self_bot: true
-    allow_dms: true
-
-  telegram:
-    token: "xxx"
-    allow_dms: true
+#  Not implemented yet
+#  telegram:
+#    token: "xxx"
+#    allow_dms: true
 
 api:
   key: "sk-xxx"
