@@ -4,6 +4,7 @@ bot:
   vision_model: true
   simulate_typing: true
   typing_speed: 100
+  sequential_chat_processing: true
 
   discord:
     token: "xxx"

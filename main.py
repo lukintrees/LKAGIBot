@@ -15,6 +15,7 @@
 
 import asyncio
 import logging
+from collections import defaultdict
 from typing import List
 
 from openai import AsyncClient
@@ -34,7 +35,10 @@ async def main():
     )
     provider: Provider = DiscordProvider()
     task = asyncio.create_task(provider.start())
+    locks = defaultdict(asyncio.Lock)
     async for message in provider.get_message_generator():
+        if config["bot"]["sequential_chat_processing"]:
+            await locks[message.chat_id].acquire()
         async with provider.typing(message):
             messages = [{"role": "system", "content": config["bot"]["system_prompt"]}]
             context = await provider.get_message_context(message)
@@ -53,6 +57,8 @@ async def main():
                 await asyncio.sleep(1)
                 await provider.send_message(msg, message, first_reply)
                 first_reply = False
+        if config["bot"]["sequential_chat_processing"]:
+            locks[message.chat_id].release()
 
 
 def to_openai_messages(messages: List[Message]) -> List:
