@@ -33,6 +33,7 @@ class DiscordMessage(Message):
             text or message.clean_content,
             message.author.display_name,
             message.author == bot.user,
+            message.channel.id,
             [
                 img.url
                 for img in message.attachments
